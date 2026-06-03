@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %} Solid Snake Game {% endblock %}
+{% block content %}
+
+<button id="start">start/restart</button>
+<!-- legger til score i h2 -->
+<h2>Score <span id="score">0</span></h2>
+<div class="grid"></div>
+<script src="/static/script/script.js" defer></script>
+{% endblock %}  

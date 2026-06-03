@@ -1,0 +1,4 @@
+legge til Register, Login og Manage ruter som lar spilleren registrere, logge inn som, og redigere brukere.
+legge til kode som lagrer opplysninger i en MySQL database
+legge til felt i Register formen som lar deg registrere alder, nationalitet og bosted(by)
+legge til knapper på Manage user siden som lar deg se og slette sensitiv data lagret om brukeren din

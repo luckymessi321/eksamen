@@ -1,0 +1,33 @@
+html, body {
+    margin: 10;
+    padding: 10;
+}
+
+nav {
+    text-align: center;
+    font-size: 30px;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 600px;
+    height: 600px;
+    border: solid 2px black;
+}
+
+.square {
+    width: 60px;
+    height: 60px;
+}
+
+.snake {
+    background-image: url("https://i.pinimg.com/1200x/af/54/8b/af548b5ec1a6b7439a34ae433eb69d4e.jpg");
+    background-repeat: no-repeat; /* Prevents the image from tiling */
+    background-position: center; /* Centers the image */
+    background-size: cover; /* Resizes the image to cover the entire container */
+}
+
+.apple {
+    background-color: red;
+}
