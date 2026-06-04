@@ -162,3 +162,5 @@ fikset problem der nettsiden krasjet om spilleren prøvde å logge ut uten å ha
 
 EKSAMEN:
 
+9:21
+opprettet en ny fil "forms.py" som inneholder en klasse "RegisterForm" for registreringsskjemaer
