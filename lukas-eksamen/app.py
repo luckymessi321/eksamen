@@ -101,5 +101,41 @@ def login():
 
     return render_template("login.html", form=form)
 
+# oppretter ruten '/save_score' slik at app.py kan sende data til 'script.js' og motta data fra 'script.js'
+@app.route('/save_score', methods=["POST"]) # methods=["POST"] får koden til å KUN aktivere når ruten får en POST-request (mottar data)
+# funksjon som henter score fra 'script.js' og lagrer det i MySQL databasen
+def save_score():
+    # henter brukernavnet og highscore til brukeren lagret i '/login' ruten (linje 77 og 78)
+    username = session.get('username')
+    highscore = session.get('score', 0)
+    #  utfører en GET-request til script.js, leser resultatet som en JSON fil, konverterer resultatet til python format (.py), og lagrer resultatet som variablen 'data'. dette lar dataen bli brukt med metoder som .get(). 
+    data = request.get_json()
+    # lagrer verdien av nøkkelen 'score' i GET-requesten definert over som variablen score
+    score = data.get('score')
+
+    if int(score) > int(highscore):
+        conn = get_conn()
+        cur = conn.cursor()
+        # kjører MySQL kode på serveren som oppdaterer 'score' verdien under den innloggede til å være scoren hentet fra script.js 
+        cur.execute('UPDATE users SET score = %s WHERE username = %s', (score, username))
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute('SELECT score FROM users WHERE username = %s', (username,))
+        user = cur.fetchone()
+        cur.close()
+        conn.close()
+
+        if user:
+            session['score'] = user[0]
+
+        return{'status': 'success'}
+    else:
+        # sender ordboken 'status : success' til script.js
+        return{'status': 'score too low'}
+
 if __name__ == "__main__":
     app.run(debug=True)

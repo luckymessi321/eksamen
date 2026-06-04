@@ -1,3 +1,4 @@
+// koden for funksjonen 'sendScore(score)' er tatt fra en venn sitt prosjekt
 const grid = document.getElementsByClassName("grid")[0] 
 const startDisplayButton = document.getElementById("start")
 const score = document.getElementById("score")
@@ -19,6 +20,36 @@ let moveTimeout;
 music.volume = 0.5
 snake.volume = 0.5
 
+// funksjon som sender score til app.py
+function sendScore(score) {
+    // henter ruten '/save_score' fra app.py og sender data til ruten som en JSON fil. denne dataen blir lagret som en ordbok
+    fetch('/save_score', {
+        // forteller funksjonen at den skal bruke POST-metoden etter å ha hentet ruten
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json' // spesifiserer at innholdet som blir sendt er en JSON fil
+        },
+        // konverterer dataen til en JSON streng. dette gjøres fordi JSON kun kan motta strenger
+        body: JSON.stringify({ score: score })    
+    })
+    // leser JSON-dataen (response) KUN når dataen er mottatt fra app.py i 'fetch()' funksjonen og konverterer det til et javascript objekt slik at script.js kan lese det
+    .then(response => response.json())
+    // dette utføres KUN når mer data er mottatt etter det første 'then' statementet. denne dataen sendes fra app.py
+    .then(data => {
+        // logger at score ble lagret og dataen mottatt i webkonsollen. denne koden kjører KUN om nøkkelen 'status' i ordboken data har verdien 'success'
+        if(data.status === 'success'){
+            console.log('score lagret', data)
+        // logger at det var en feil og dataen mottatt i webkonsollen. denne koden kjører KUN når nøkkelen 'status' i data ikke har verdien 'success'
+        } else if (data.status === 'score too low') {
+            console.log('score too low', data)
+        } else {
+            console.log('feil ved lagring av score', data);
+        }
+    })
+    // fanger og håndterer eventuelle feilmeldinger som oppstår og logger dem som errors. denne koden er bra for å teste nettsider siden nettsiden ikke krasjer, og feilmeldinger blir logget. denne koden kjører KUN om en feilmelding oppstår i sendScore funksjonen
+    .catch(error => console.error('Error:', error));
+}
+
 function startButton () {
     if (!buttonPressed) {
         startGame()
@@ -37,6 +68,7 @@ function startGame () {
 }
 
 function restartGame () {
+    sendScore(count)
     squares.forEach(square => square.classList.remove('apple'))
     currentSnake.forEach(index => squares[index].classList.remove('snake'))
     currentSnake = [2,1,0]

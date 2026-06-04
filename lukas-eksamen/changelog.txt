@@ -177,3 +177,7 @@ la til en klasse "LoginForm" i forms.py for login-skjemaer
 la til en mal "login.html" som lar spilleren logge inn med en bruker i databasen via et skjema.
 la til en rute "/login" i app.py som gir skjemaet i login.html klassen LoginForm og søker databasen for brukeren spilleren logger inn med.
 
+9:51
+la til en funksjon "sendScore(score)" i script.js som sender score til app.py som en readable .json fil.
+la til en rute "/save_score" som mottar score fra script.js og lagrer den som ny highscore i databasen om scoren er høyere enn brukerens highscoren.
+
