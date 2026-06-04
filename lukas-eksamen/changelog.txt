@@ -1,0 +1,164 @@
+Mandag 23 Februar 2026
+* la til filstruktur og installerte flask
+
+Fredag 27 Februar 2026
+* la til to-do list og changelog
+* la til et canvas element i index.html som skal fungere som spillområdet
+
+Mandag 2 Mars 2026
+* la til et script som lager en grid, lager en snake inne i grid-en, og lar spilleren flytte slangen med arrowkeys. denne grid-en erstatter canvas-elementet
+* la til en ny texture for snake klassen
+* la til 2 sound effects som spilles av når et eple blir spist og la til musikk som spilles av når spilleren trykker 'p'
+
+Tirsdag 3 Mars 2026
+* la til 2 nye sound effects
+* la til kode som lar spilleren stoppe musikken når de trykker 'm'
+* la til kode som får slangen til å flytte seg fortere hver gang den spiser et eple, men lar den ikke gå fortere en 1 square per 500ms
+* endret koden slik at den bruker setTimeout og ikke setInterval. dette gjør sånn at intervallet til move funksjonen kan endres i selve move funksjonen
+* la til kode som lar spilleren starte og restarte spillet ved å trykke på start/restart knappen
+* endret koden slik at spillet KUN starter når start knappen er trykket og restarter spillet om start knappen allerede har blitt trykket
+
+Torsdag 5 Mars 2026
+* la til app.wsgi
+
+Fredag 6 Mars 2026
+* importerte filer og kode fra en lærer sin presentasjon. dette inkluderer: malene 'register.html' og 'login.html', som mottar registreringsinfo og login-info fra brukeren og POST-er det til app.py i rutene '/register' og '/login'.
+                                                                            kode i app.py som mottar registreringinfo fra '/register' ruten og lagrer infoen i MySQL tabellen 'users' i databasen 'login'.
+                                                                            kode i app.py som mottar login-info fra '/login' ruten og henter lagret brukerinfo i MySQL tabellen 'users' i databasen 'login'.
+                                                                            filen 'forms.py' som definerer 2 klasser 'RegisterForm' og 'LoginForm' som blir importert og brukt i app.py.
+
+* tilpasset de importerte filene nevnt ovenfor. disse endringene inkluderer: fjernet utfyllingsfeltene 'name' og 'adress' i 'register.html' og klassene definert i 'forms.py'.
+                                                                             endret kode i app.py til å ikke motta navn og adresse i /register ruten. endret også 'brukernavn' og 'passord' variablene til 'username' og 'password'
+                                                                             endret '/login' ruten i app.py slik at den sender brukeren til ruten '/' og ikke '/welcome'
+                                                                             endret '/login' ruten i app.py slik at den henter ut 'username' og ikke 'navn' i cur.execute()
+                                                                             oppdaterte funksjonen 'get_conn()' i app.py slik at brukeren (user) stemmer med brukeren min på serveren
+
+* la til app.secret_key = "hemmelig-nok". denne koden er nødvendig for at rutene '/register' og '/login' skal fungere.
+
+* la til navigasjonsbar i base.html malen som vises på alle sider. navigasjonsbaren inneholder lenker til '/register', '/login' og '/' rutene.
+
+* stylet navigasjonsbar i styles.css slik at teksten ender opp på midten av skjermen og gjorde teksten større (30px).
+
+* la til titler for register.html og login.html sidene. oppdaterte også tittel for index.html til 'Solid Snake Game'
+
+* la til kode som lagrer highscore i MySQL databasen. den nye koden består av ruten '/save_score' i app.py (linje 86) og funksjonen sendScore() i script.js (linje 21). koden er bedre forklart i app.py og script.js kommentarene
+ruten '/save_score' er en rute som KUN aktiveres når data er mottatt (POST-request) fra sendScore funksjonen, og lagrer dataen i MySQL databasen under kolonnen 'score'
+funksjonen sendScore(score) er en funksjon som henter '/save_score' ruten og sender scoren din til ruten i app.py. denne funksjonen kjører når spillet restarter
+
+* endret koden slik at highscore automatisk settes til 0 når en bruker er registrert.
+* la til kode i index.html som viser highscore og username
+* endret ruten '/' i app.py slik at den sender spilleren til en avlogget versjon av spillet om de ikke er logget inn (index2.html)
+* endret koden i login ruten slik at den henter ut highscoren til spilleren
+* endret koden i app.py slik at highscore KUN oppdateres når current score er høyere enn highscore
+* la til kode i script.js som console logger 'score too low' om scoren er lavere enn highscore
+* la til README fil
+* la til kommentaren 'koden for funksjonen 'sendScore(score)' er tatt fra en venn sitt prosjekt' i script.js
+* redigerte readme fil
+* la til nytt script for avlogget versjon (script2.js). scriptet er det samme scriptet som script.js, men uten sendScore funksjonen.
+
+Mandag 9 Mars 2026
+base.html:
+* la til Manage User siden i navigasjonsbaren
+
+manage.html
+* la til en ny side 'Manage User' der brukeren kan logge ut av kontoen sin.
+* la til en ny mal 'manage.html'
+
+app.py:
+* la til en ny rute '/manage' som laster inn malen 'manage.html' i app.py
+
+forms.py
+* la til en ny form 'LogoutForm' i forms.py som inneholder et submit felt. om brukeren submitter, får de en popup som spør dem om de er sikre på at de vil logge ut. om brukeren trykker 'OK', slettes all session data (med andre ord logges de ut)
+* la til 2 nye forms 'EditForm' og 'DeleteForm'. EditForm og DeleteForm inneholder 'username' og 'password' felt slik at brukeren må skrive inn brukernavn og passord før de endrer noe. EditForm inneholder 'editUsername' og 'editPassword' felt der brukeren kan endre brukernavn eller passord
+
+manage.js:
+* la til et script 'manage.js' for confirm popup-en.
+
+index.html:
+* la til tekst i index.html som forklarer hvordan man oppdaterer highscore
+
+index2.html:
+* la til et nytt felt i den avloggede versjonen av spillet (index2.html) som forteller deg at du ikke er logget inn
+
+script.js:
+* endret koden i script.js slik at spillet FAKTISK stopper.
+* la til variabelen 'gameStopped' som kontrollerer om spillet er stoppet.
+* la til kode som setter gameStopped til true og gir spilleren en popup 'Game over!' når spillet er over.
+* la til kode som setter gameStopped til false når spillet startes og restartes.
+* gjorde move-timeout om til en variabel slik at timeout-en kan stoppes med clearTimeout().
+* fikset problem der slangen kunne snu seg inn i seg selv (teknisk sett fortsatt mulig, men mye vanskeligere enn før)
+
+script2.js
+* oppdaterte scriptet for avlogget versjon ved å kopiere kode fra script.js og lime den inn i script2.js
+
+Tirsdag 10 Mars 2026
+
+app.py:
+* importerte klassene 'EditForm' og 'DeleteForm' fra forms.py
+* definerte 2 nye forms av klassen EditForm og DeleteForm under ruten '/manage'
+* la til kode som oppdaterer database og session data under form2 (klasse EditForm) i app.py. se kommentarene under if form2.validate_on_submit(): i rute '/manage' i app.py for detaljert forklaring.
+
+Onsdag 11 Mars 2026
+
+app.py:
+* fikset problem der kode under alle 'if validate_on_submit' deler av koden kjørte selv om kun en form ble submitted. dette gjorde jeg ved å endre alle linjer under ruten '/manage' som inneholder 'if form.validate_on_submit' (f.eks if form2.validate_on_submit) til 'if form.submit.data and form.validate_on_submit' (f.eks if form2.submitEdit.data and form2.validate_on_submit). dette sørger for at kun validate_on_submit koden til formen submitted kjører
+* la til kode til Delete User form. se kommentarene i app.py for detaljert forklaring.
+* la til kode i '/register' ruten som sjekker om det allerede finnes en bruker med samme brukernavn. om brukernavnet er tatt, får spilleren en feilmelding.
+
+forms.py:
+* oppdaterte koden under class EditForm slik at det står 'New Username' og 'New Password' ved utfyllingsfeltene 'editUsername' og 'editPassword' (pleide å stå 'Username' og 'Password')
+* oppdaterte username og password felt i EditForm og DeleteForm slik at det viser 'Confirm Username' og 'Confirm Password' (pleide å vise 'Username' og 'Password')
+
+manage.js:
+* la til funksjonen 'confirmEdit' som gir deg en popup som spør om du er sikker på at du vil redigere brukeren din
+* la til funksjonen 'confirmDelete' som gir deg en popup som spør om du er sikker på at du vil slette brukeren din
+
+manage.html:
+* la til et nytt form element av klassen EditForm der brukeren kan redigere brukernavn eller passord.
+* la til funksjonen confirmEdit onsubmit i Edit User formen slik at spilleren kun får popup-en om de submitter formen.
+* la til et nytt form element av klassen DeleteForm der brukeren kan slette brukeren sin.
+* la til funksjonen confirmDelete onsubmit i Delete User formen slik at spilleren kun får popup-en om de submitter formen.
+
+register.html:
+* la til kode som gjør alle errors i register.html røde
+
+script.js:
+* flyttet linjen 'gameStopped = false' til å være over clearTimeout linjen
+
+Mandag 16 Mars 2026
+
+app.py:
+* fjernet redirect() under register ruten. jeg gjorde dette fordi jeg syntes at redirect-en var for brå.
+* la til password hashing. se kommentarer i app.py 
+* gjorde det umulig å endre navn på bruker om en annen bruker med samme navn eksisterer (se edit formen i manage ruten)
+
+login.html:
+* la til passord feilmeldinger i login.html
+
+script2.js
+* fikset movement bug i avlogget versjon der slangen flyttet seg med 2x speed etter å ha dødd
+
+base2.html:
+* lagde en base.html fil 'base2.html' for den avloggede versjonen av spillet som ikke inneholder Manage user siden.
+
+Tirsdag 17 Mars 2026
+
+register.html
+* * la til en grønn 'error' message som forteller brukeren at register var successful
+
+login.html
+* la til en grønn 'error' message som forteller brukeren at login var successful
+
+manage.html
+* la til en grønn 'error' message under hver form som forteller brukeren at edit eller delete var successful
+
+app.py
+* la til nye error messages under hver form (minus logout). disse 'feilmeldingene' er ikke feilmeldinger, men meldinger som bekrefter at handlingen var successful.
+
+Fredag 20 Mars 2026
+
+app.py
+fikset problem der nettsiden krasjet om spilleren prøvde å logge ut uten å ha logget inn
+
+EKSAMEN:
+
