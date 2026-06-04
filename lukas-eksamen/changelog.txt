@@ -209,3 +209,6 @@ la til kryptering og dekryptering for sensitiv informasjon.
 la til en klasse "DeleteData" i forms.py
 la til et skjema i manage.html som sletter all sensitiv data lagret om brukeren
 la til kode under ruten "/manage" som gir skjemaet i manage.html klassen DeleteData og setter all sensitiv informasjon i databasen til NULL
+
+13:54
+la til en popup som spør deg om du er sikker på om du vil slette lagret data

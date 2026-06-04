@@ -9,3 +9,7 @@ function confirmEdit () {
 function confirmDelete () {
     return confirm("Are you sure you want to delete your account?")
 }
+
+function confirmDeleteData () {
+    return confirm("Are you sure you want to delete your saved information?")
+}

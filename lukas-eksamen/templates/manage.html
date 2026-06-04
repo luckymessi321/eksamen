@@ -58,7 +58,7 @@
 
 <!-- Delete Data Form -->
  <h2>Delete sensitive data</h2>
- <form method="POST">
+ <form method="POST" onsubmit="return confirmDeleteData();">
     {{ form5.hidden_tag() }}
     {{ form5.username4.label }} {{ form5.username4 }} <br>
     {{ form5.password4.label }} {{ form5.password4 }} <br>

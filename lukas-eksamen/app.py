@@ -283,17 +283,29 @@ def manage():
 
                     #kopiert fra ChatGPT
                     cipher = Fernet(key)
-                    if age is not None:
+                    if age_encrypted is not None:
                         age = cipher.decrypt(age_encrypted).decode()
-                        nationality = cipher.decrypt(nationality_encrypted).decode()
-                        city = cipher.decrypt(city_encrypted).decode()
-                        gender = cipher.decrypt(gender_encrypted).decode()
-                        email = cipher.decrypt(email_encrypted).decode()
                     else:
                         age = "Not stated"
+
+                    if nationality_encrypted is not None:
+                        nationality = cipher.decrypt(nationality_encrypted).decode()
+                    else:
                         nationality = "Not stated"
+
+                    if city_encrypted is not None:
+                        city = cipher.decrypt(city_encrypted).decode()
+                    else:
                         city = "Not stated"
+
+                    if gender_encrypted is not None:
+                        gender = cipher.decrypt(gender_encrypted).decode()
+                    else:
                         gender = "Not stated"
+
+                    if email_encrypted is not None:
+                        email = cipher.decrypt(email_encrypted).decode()
+                    else:
                         email = "Not stated"
                 else:
                     form4.username3.errors.append("Password doesnt match your current user's password")
