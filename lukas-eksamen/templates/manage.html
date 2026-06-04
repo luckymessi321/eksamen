@@ -50,6 +50,25 @@
     {{ form4.username3.label }} {{ form4.username3 }} <br>
     {{ form4.password3.label }} {{ form4.password3 }} <br>
     {{ form4.showData }}
+    {% for error in form4.username3.errors %}
+        <p style="color:red">{{ error }}</p>
+    {% endfor %}
+ </form>
+
+
+<!-- Delete Data Form -->
+ <h2>Delete sensitive data</h2>
+ <form method="POST">
+    {{ form5.hidden_tag() }}
+    {{ form5.username4.label }} {{ form5.username4 }} <br>
+    {{ form5.password4.label }} {{ form5.password4 }} <br>
+    {{ form5.deleteData }}
+    {% for error in form5.username4.errors %}
+        <p style="color:red">{{ error }}</p>
+    {% endfor %}
+    {% for error in form5.password4.errors %}
+        <p style="color:green">{{ error }}</p>
+    {% endfor %}
  </form>
 
 {% if age %}

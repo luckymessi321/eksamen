@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, session, request
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
 from cryptography.fernet import Fernet
-from forms import RegisterForm, LoginForm, LogoutForm, EditForm, DeleteForm, ShowData
+from forms import RegisterForm, LoginForm, LogoutForm, EditForm, DeleteForm, ShowData, DeleteData
 
 # kopiert fra ChatGPT
 key = b'fOJfIS_1eIPxYlYIY2c4D3Zkyp5b9lLLTnuoOrTwRlk='   
@@ -131,6 +131,7 @@ def manage():
     form2 = EditForm()
     form3 = DeleteForm()
     form4 = ShowData()
+    form5 = DeleteData()
     age = None
     nationality = None
     city = None
@@ -282,14 +283,58 @@ def manage():
 
                     #kopiert fra ChatGPT
                     cipher = Fernet(key)
-                    age = cipher.decrypt(age_encrypted).decode()
-                    nationality = cipher.decrypt(nationality_encrypted).decode()
-                    city = cipher.decrypt(city_encrypted).decode()
-                    gender = cipher.decrypt(gender_encrypted).decode()
-                    email = cipher.decrypt(email_encrypted).decode()
+                    if age is not None:
+                        age = cipher.decrypt(age_encrypted).decode()
+                        nationality = cipher.decrypt(nationality_encrypted).decode()
+                        city = cipher.decrypt(city_encrypted).decode()
+                        gender = cipher.decrypt(gender_encrypted).decode()
+                        email = cipher.decrypt(email_encrypted).decode()
+                    else:
+                        age = "Not stated"
+                        nationality = "Not stated"
+                        city = "Not stated"
+                        gender = "Not stated"
+                        email = "Not stated"
+                else:
+                    form4.username3.errors.append("Password doesnt match your current user's password")
+        else:
+             form4.username3.errors.append("Username doesnt match the current user's username")
 
-    return render_template('manage.html', form=form, form2=form2, form3=form3, form4=form4, age=age, nationality=nationality, city=city, gender=gender, email=email)
+    #Delete Data Form
+    if form5.deleteData.data and form5.validate_on_submit():
+        username4 = form5.username4.data
+        password4 = form5.password4.data
 
+        if username4 == username:
+            conn = get_conn()
+            cur = conn.cursor()
+
+            # henter info fra databasen
+            cur.execute('SELECT username, password FROM users WHERE username=%s', (username4,))
+            user6 = cur.fetchone()
+
+            cur.close()
+            conn.close()
+
+            # sjekker om en bruker med brukernavnet brukeren skrev inn eksisterer
+            if user6:
+                password_db4 = user6[1]
+                if check_password_hash(password_db4, password4):
+                    conn = get_conn()
+                    cur = conn.cursor()
+                    
+                    cur.execute("UPDATE users SET age=NULL, nationality=NULL, city=NULL, gender=NULL, email=NULL WHERE username=%s", (username4,))
+                    conn.commit()
+                    cur.close()
+                    conn.close()
+                    form5.password4.errors.append(f'Successfully deleted saved data for user {username4}')
+                else:
+                    form5.username4.errors.append("Password doesnt match your current user's password")
+        else:
+             form5.username4.errors.append("Username doesnt match the current user's username")
+
+            
+    return render_template('manage.html', form=form, form2=form2, form3=form3, form4=form4, form5=form5, age=age, nationality=nationality, city=city, gender=gender, email=email)    
 # oppretter ruten '/save_score' slik at app.py kan sende data til 'script.js' og motta data fra 'script.js'
 @app.route('/save_score', methods=["POST"]) # methods=["POST"] får koden til å KUN aktivere når ruten får en POST-request (mottar data)
 # funksjon som henter score fra 'script.js' og lagrer det i MySQL databasen

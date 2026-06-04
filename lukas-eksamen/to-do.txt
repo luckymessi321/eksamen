@@ -1,2 +1,0 @@
-legge til felt i Register formen som lar deg registrere alder, nationalitet og bosted(by)
-legge til knapper på Manage user siden som lar deg se og slette sensitiv data lagret om brukeren din

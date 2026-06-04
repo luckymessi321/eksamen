@@ -37,3 +37,9 @@ class ShowData(FlaskForm):
     username3 = StringField("Confirm Username", validators=[InputRequired()])
     password3 = PasswordField("Confirm Password", validators=[InputRequired()])
     showData = SubmitField("Show saved sensitive data")
+
+class DeleteData(FlaskForm):
+    username4 = StringField("Confirm Username", validators=[InputRequired()])
+    password4 = PasswordField("Confirm Password", validators=[InputRequired()])
+    deleteData = SubmitField("Delete saved sensitive data")
+

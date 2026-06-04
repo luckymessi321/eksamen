@@ -205,3 +205,7 @@ la til et skjema i manage.html som viser brukeren sensitiv data lagret om dem
 la til kode under ruten "/manage" som gir skjemaet i manage.html klassen ShowData og henter sensitiv informasjon lagret i databasen.
 la til kryptering og dekryptering for sensitiv informasjon.
 
+13:22
+la til en klasse "DeleteData" i forms.py
+la til et skjema i manage.html som sletter all sensitiv data lagret om brukeren
+la til kode under ruten "/manage" som gir skjemaet i manage.html klassen DeleteData og setter all sensitiv informasjon i databasen til NULL
