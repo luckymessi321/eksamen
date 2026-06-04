@@ -197,3 +197,11 @@ la til en mal "manage.html" der spilleren kan redigere brukeren sin eller logge 
 la til klassene "LogoutForm", "EditForm" og "DeleteForm" i forms.py og importerte dem i app.py
 la til en rute "/manage" i app.py som gir skjemaene i manage.html klassene LogoutForm, EditForm og DeleteForm og lagrer endringer i databasen.
 la til et script "manage.js" som gir skjemaene i manage.html onsubmit alerts som spør spilleren om de er sikre på om de vil endre brukeren deres
+
+12:37
+la til registreringsfelt for alder, nationalitet, by, kjønn og epost i register.html
+la til en klasse "ShowData" i forms.py
+la til et skjema i manage.html som viser brukeren sensitiv data lagret om dem
+la til kode under ruten "/manage" som gir skjemaet i manage.html klassen ShowData og henter sensitiv informasjon lagret i databasen.
+la til kryptering og dekryptering for sensitiv informasjon.
+

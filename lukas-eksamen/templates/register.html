@@ -4,11 +4,19 @@
 
 {% block content %}
 <h2>Register new user</h2>
+
+<h3>Registering sensitive information such as age, gender, nationality or city is optional and may be skipped</h3>
+
 <form method="POST">
     {{ form.hidden_tag() }}
     <!-- utfyllingsfelt med brukernavn og passord-->
     {{ form.username.label }} {{ form.username }}<br>
     {{ form.password.label }} {{ form.password }}<br>
+    {{ form.age.label }} {{ form.age }}<br>
+    {{ form.gender.label }} {{ form.gender }}<br>
+    {{ form.nationality.label }} {{ form.nationality }}<br>
+    {{ form.city.label }} {{ form.city }}<br>
+    {{ form.email.label }} {{ form.email }}<br>
     <!-- submit-knapp som sender registrert info fra feltene over til app.py-->
     {{ form.submit }}
     {% for error in form.username.errors %}

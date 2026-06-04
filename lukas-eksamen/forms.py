@@ -5,6 +5,11 @@ from wtforms.validators import InputRequired
 class RegisterForm(FlaskForm):
     username = StringField("Username", validators=[InputRequired()])
     password = PasswordField("Password", validators=[InputRequired()])
+    age = StringField("Age")
+    gender = StringField("Gender")
+    nationality = StringField("Nationality")
+    city = StringField("City")
+    email = StringField("Email")
     submit = SubmitField("Register")
 
 class LoginForm(FlaskForm):
@@ -27,3 +32,8 @@ class DeleteForm(FlaskForm):
     username2 = StringField("Confirm Username", validators=[InputRequired()])
     password2 = PasswordField("Confirm Password", validators=[InputRequired()])
     submitDelete = SubmitField("Delete current user")
+
+class ShowData(FlaskForm):
+    username3 = StringField("Confirm Username", validators=[InputRequired()])
+    password3 = PasswordField("Confirm Password", validators=[InputRequired()])
+    showData = SubmitField("Show saved sensitive data")

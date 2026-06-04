@@ -6,7 +6,7 @@ For å spille spillet må du endre directory med "cd /var/www/eksamen/lukas-eksa
 
 Spilleren kontrollerer slangen med piltaster.
 
-Spillet lar brukere lagre sensitive opplysninger som alder, nationalitet og bosted(by).
+Spillet lar brukere lagre sensitive opplysninger som alder, kjønn, nationalitet, by og epost.
 
 Programmer brukt: MySQL, Python3, HTML, CSS, JavaScript, Flask, VSCode.
 

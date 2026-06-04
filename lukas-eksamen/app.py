@@ -1,8 +1,11 @@
 from flask import Flask, render_template, redirect, session, request
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
-from forms import RegisterForm, LoginForm, LogoutForm, EditForm, DeleteForm
+from cryptography.fernet import Fernet
+from forms import RegisterForm, LoginForm, LogoutForm, EditForm, DeleteForm, ShowData
 
+# kopiert fra ChatGPT
+key = b'fOJfIS_1eIPxYlYIY2c4D3Zkyp5b9lLLTnuoOrTwRlk='   
 
 app = Flask(__name__)
 # importert fra presentasjon
@@ -37,7 +40,20 @@ def register():
         # definerer brukernavn og passord i variabler
         username = form.username.data
         password = form.password.data
+        age = form.age.data
+        gender = form.gender.data
+        nationality = form.nationality.data
+        city = form.city.data
+        email = form.email.data
         password_hash = generate_password_hash(password)
+
+        #kopiert fra ChatGPT
+        cipher = Fernet(key)
+        age_encrypted = cipher.encrypt(age.encode())
+        gender_encrypted = cipher.encrypt(gender.encode())
+        nationality_encrypted = cipher.encrypt(nationality.encode())
+        city_encrypted = cipher.encrypt(city.encode())
+        email_encrypted = cipher.encrypt(email.encode())
 
         # oppretter tilkobling til MySQL databasen og lagrer tilkoblingen som en variabel 'conn'. dette lar meg bruke methods som .commit()
         conn = get_conn()
@@ -58,8 +74,8 @@ def register():
             cur = conn.cursor()
             # kjører MySQL kode på serveren som lagrer brukernavn og passord hentet fra '/register' ruten i databasen.
             cur.execute(
-                "INSERT INTO users (username, password, score) VALUES (%s, %s, %s)",
-                (username, password_hash, 0)
+                "INSERT INTO users (username, password, score, age, nationality, city, gender, email) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+                (username, password_hash, 0, age_encrypted, nationality_encrypted, city_encrypted, gender_encrypted, email_encrypted)
             )
             # lagrer endringene gjort i cur.execute og lukker tilkoblingen til databasen
             conn.commit()
@@ -114,6 +130,13 @@ def manage():
     form = LogoutForm()
     form2 = EditForm()
     form3 = DeleteForm()
+    form4 = ShowData()
+    age = None
+    nationality = None
+    city = None
+    gender = None
+    email = None
+
 
     # Logout form
     if form.submit.data and form.validate_on_submit():
@@ -121,7 +144,6 @@ def manage():
             # sletter session dataen til brukeren
             session.pop('username')
             session.pop('score')
-        redirect('/')
 
     # Edit User form
     if form2.submitEdit.data and form2.validate_on_submit():
@@ -227,7 +249,46 @@ def manage():
         else:
             form3.username2.errors.append("Username doesnt match the current user's username")
 
-    return render_template('manage.html', form=form, form2=form2, form3=form3)
+    #Show Data Form
+    if form4.showData.data and form4.validate_on_submit():
+        username3 = form4.username3.data
+        password3 = form4.password3.data
+
+        if username3 == username:
+            conn = get_conn()
+            cur = conn.cursor()
+
+            # henter info fra databasen
+            cur.execute('SELECT username, password FROM users WHERE username=%s', (username3,))
+            user5 = cur.fetchone()
+
+            cur.close()
+            conn.close()
+
+            # sjekker om en bruker med brukernavnet brukeren skrev inn eksisterer
+            if user5:
+                password_db3 = user5[1]
+                if check_password_hash(password_db3, password3):
+                    conn = get_conn()
+                    cur = conn.cursor()
+
+                    cur.execute('SELECT age, nationality, city, gender, email FROM users WHERE username=%s', (username3,))
+                    userData = cur.fetchone()
+                    age_encrypted = userData[0]
+                    nationality_encrypted = userData[1]
+                    city_encrypted = userData[2]
+                    gender_encrypted = userData[3]
+                    email_encrypted = userData[4]
+
+                    #kopiert fra ChatGPT
+                    cipher = Fernet(key)
+                    age = cipher.decrypt(age_encrypted).decode()
+                    nationality = cipher.decrypt(nationality_encrypted).decode()
+                    city = cipher.decrypt(city_encrypted).decode()
+                    gender = cipher.decrypt(gender_encrypted).decode()
+                    email = cipher.decrypt(email_encrypted).decode()
+
+    return render_template('manage.html', form=form, form2=form2, form3=form3, form4=form4, age=age, nationality=nationality, city=city, gender=gender, email=email)
 
 # oppretter ruten '/save_score' slik at app.py kan sende data til 'script.js' og motta data fra 'script.js'
 @app.route('/save_score', methods=["POST"]) # methods=["POST"] får koden til å KUN aktivere når ruten får en POST-request (mottar data)

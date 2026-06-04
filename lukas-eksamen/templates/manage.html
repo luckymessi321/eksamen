@@ -42,4 +42,22 @@
         <p style="color:green">{{ error }}</p>
     {% endfor %}
 </form>
+
+<!-- Show Data Form -->
+ <h2>Show sensitive data</h2>
+ <form method="POST">
+    {{ form4.hidden_tag() }}
+    {{ form4.username3.label }} {{ form4.username3 }} <br>
+    {{ form4.password3.label }} {{ form4.password3 }} <br>
+    {{ form4.showData }}
+ </form>
+
+{% if age %}
+<h3> User Data </h3>
+<p> Age: {{ age }} </p>
+<p> Nationality: {{ nationality }} </p>
+<p> City: {{ city }} </p>
+<p> Gender: {{ gender }} </p>
+<p> Email: {{ email }} </p>
+{% endif %}
 {% endblock %}  
