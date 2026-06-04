@@ -191,3 +191,9 @@ endret "/" ruten i app.py slik at spilleren sendes til index2.html om de er avlo
 10:09
 la til URL-ene "/register" og "/login" i navigasjonsbaren i base.html
 importerte LoginForm i app.py
+
+10:20
+la til en mal "manage.html" der spilleren kan redigere brukeren sin eller logge ut via skjemaer
+la til klassene "LogoutForm", "EditForm" og "DeleteForm" i forms.py og importerte dem i app.py
+la til en rute "/manage" i app.py som gir skjemaene i manage.html klassene LogoutForm, EditForm og DeleteForm og lagrer endringer i databasen.
+la til et script "manage.js" som gir skjemaene i manage.html onsubmit alerts som spør spilleren om de er sikre på om de vil endre brukeren deres

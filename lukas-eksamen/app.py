@@ -1,7 +1,8 @@
 from flask import Flask, render_template, redirect, session, request
 from werkzeug.security import generate_password_hash, check_password_hash
 import mysql.connector
-from forms import RegisterForm, LoginForm
+from forms import RegisterForm, LoginForm, LogoutForm, EditForm, DeleteForm
+
 
 app = Flask(__name__)
 # importert fra presentasjon
@@ -106,6 +107,127 @@ def login():
             form.username.errors.append("User doesn't exist")
 
     return render_template("login.html", form=form)
+
+@app.route("/manage", methods=["GET", "POST"])
+def manage():
+    username = session.get('username')
+    form = LogoutForm()
+    form2 = EditForm()
+    form3 = DeleteForm()
+
+    # Logout form
+    if form.submit.data and form.validate_on_submit():
+        if session.get('username'):
+            # sletter session dataen til brukeren
+            session.pop('username')
+            session.pop('score')
+        redirect('/')
+
+    # Edit User form
+    if form2.submitEdit.data and form2.validate_on_submit():
+        username1 = form2.username1.data
+        password1 = form2.password1.data
+        editUsername = form2.editUsername.data
+        editPassword = form2.editPassword.data
+        password_hash = generate_password_hash(editPassword)
+        
+        # sjekker om brukernavnet spilleren fylte inn stemmer med brukernavnet lagret i session. dette gjøres for å sikre at det ikke er mulig å endre en bruker uten å være logget inn med den
+        if username1 == username:
+            conn = get_conn()
+            cur = conn.cursor()
+
+            # kjører kode som henter info lagret om brukeren i databasen
+            cur.execute('SELECT username, password FROM users where username=%s', (username1,))
+            user = cur.fetchone()
+            cur.close()
+            conn.close()
+
+            # sjekker om en bruker med brukernavnet brukeren skrev inn eksisterer
+            if user:
+                password_db = user[1]
+                if check_password_hash(password_db, password1):
+                    conn = get_conn()
+                    cur = conn.cursor()
+
+                    cur.execute('SELECT username FROM users where username=%s', (editUsername,))
+                    user2 = cur.fetchone()
+
+                    cur.close()
+                    conn.close()
+
+                    if user2:
+                        form2.username1.errors.append('This username is already taken. Please choose a new username')
+                    else:
+                        conn = get_conn()
+                        cur = conn.cursor()
+
+                        # oppdaterer brukernavn og passord til brukeren i databasen
+                        cur.execute('UPDATE users SET username=%s, password=%s WHERE username=%s', (editUsername, password_hash, username1))
+                        conn.commit()
+                        cur.close()
+                        conn.close()
+                    
+                        conn = get_conn()
+                        cur = conn.cursor()
+
+                        # henter brukernavn og score til brukeren som nettopp ble endret og lagrer dataen i en variabel 'user3'
+                        cur.execute('SELECT username, score FROM users WHERE username = %s', (editUsername,))
+                        user3 = cur.fetchone()
+
+                        cur.close()
+                        conn.close()
+
+                        # sjekker om data ble lagret i user3
+                        if user3:
+                            # oppdaterer session data til å matche brukernavn og score til den redigerte brukeren
+                            session['username'] = user3[0]
+                            session['score'] = user3[1]
+                            form2.password1.errors.append(f'Succesfully saved changes made to user {username1}')
+                else:
+                    # gir brukeren en feilmelding
+                    form2.username1.errors.append("Password doesnt match your current user's password")
+        else:
+            form2.username1.errors.append("Username doesnt match the current user's username")
+
+    # Delete User form
+    if form3.submitDelete.data and form3.validate_on_submit():
+        username2 = form3.username2.data
+        password2 = form3.password2.data
+
+         # sjekker om brukernavnet spilleren fylte inn stemmer med brukernavnet lagret i session. dette gjøres for å sikre at det ikke er mulig å slette en bruker uten å være logget inn med den
+        if username2 == username:
+            conn = get_conn()
+            cur = conn.cursor()
+
+            # lagrer info til brukeren som en variabel 'user4'
+            cur.execute('SELECT username, password FROM users WHERE username=%s', (username2,))
+            user4 = cur.fetchone()
+
+            cur.close()
+            conn.close()
+
+            # sjekker om en bruker med brukernavnet brukeren skrev inn eksisterer
+            if user4:
+                password_db2 = user4[1]
+                if check_password_hash(password_db2, password2):
+                    conn = get_conn()
+                    cur = conn.cursor()
+
+                    # kjører kode som sletter brukeren fra databasen
+                    cur.execute('DELETE FROM users WHERE username=%s', (username2,))
+                    conn.commit()
+                    cur.close()
+                    conn.close()
+                    # sletter session dataen til brukeren
+                    session.pop('username')
+                    session.pop('score')
+                    form3.password2.errors.append(f'Successfully deleted user {username2}')
+                else:
+                    form3.username2.errors.append("Password doesnt match your current user's password")
+        else:
+            form3.username2.errors.append("Username doesnt match the current user's username")
+
+    return render_template('manage.html', form=form, form2=form2, form3=form3)
 
 # oppretter ruten '/save_score' slik at app.py kan sende data til 'script.js' og motta data fra 'script.js'
 @app.route('/save_score', methods=["POST"]) # methods=["POST"] får koden til å KUN aktivere når ruten får en POST-request (mottar data)

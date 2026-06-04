@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %} Manage User {% endblock %}
+{% block content %}
+<script src="/static/script/manage.js"></script>
+<h1>Manage User</h1>
+
+<!-- Logout form -->
+<form method="POST" onsubmit="return confirmLogout();">
+    {{ form.hidden_tag() }}
+    {{ form.submit }}
+</form>
+
+<!-- Edit User form -->
+ <h2>Edit User</h2>
+<form method="POST" onsubmit="return confirmEdit();">
+    {{ form2.hidden_tag() }}
+    {{ form2.username1.label }} {{ form2.username1 }} <br>
+    {{ form2.password1.label }} {{ form2.password1 }} <br>
+    {{ form2.editUsername.label }} {{ form2.editUsername }} <br>
+    {{ form2.editPassword.label }} {{ form2.editPassword }} <br>
+    {{ form2.submitEdit }}
+    {% for error in form2.username1.errors %}
+        <p style="color:red">{{ error }}</p>
+    {% endfor %}
+    {% for error in form2.password1.errors %}
+        <p style="color:green">{{ error }}</p>
+    {% endfor %}
+</form>
+
+<!-- Delete User form -->
+ <h2>Delete User</h2>
+<form method="POST" onsubmit="return confirmDelete();">
+    {{ form3.hidden_tag() }}
+    {{ form3.username2.label }} {{ form3.username2 }} <br>
+    {{ form3.password2.label }} {{ form3.password2 }} <br>
+    {{ form3.submitDelete }}
+    {% for error in form3.username2.errors %}
+        <p style="color:red">{{ error }}</p>
+    {% endfor %}
+    {% for error in form3.password2.errors %}
+        <p style="color:green">{{ error }}</p>
+    {% endfor %}
+</form>
+{% endblock %}  
