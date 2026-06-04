@@ -18,7 +18,13 @@ def get_conn():
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    #sjekker om spilleren er logget inn
+    if session.get('username'):
+        # sender brukeren til spillet
+        return render_template('index.html', highscore=session.get('score'), username = session.get('username'))
+    else:
+        # sender brukeren til en avlogget versjon av spillet
+        return render_template('index2.html') 
 
 # rute med kode som kjører KUN når register.html henter data fra app.py (GET), eller sender data til app.py (POST)
 @app.route("/register", methods=["GET", "POST"])

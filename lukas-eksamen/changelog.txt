@@ -181,3 +181,9 @@ la til en rute "/login" i app.py som gir skjemaet i login.html klassen LoginForm
 la til en funksjon "sendScore(score)" i script.js som sender score til app.py som en readable .json fil.
 la til en rute "/save_score" som mottar score fra script.js og lagrer den som ny highscore i databasen om scoren er høyere enn brukerens highscoren.
 
+9:56
+la til kode som viser brukernavnet ditt og highscoren din i index.html
+la til en mal "base2.html"
+la til en mal "index2.html" som spilleren sendes til når de ikke er logget inn. malen arver av "base2.html" og bruker "script2.js"
+la til et script "script2.js" som er det samme scriptet som "script.js" men uten highscore saving
+endret "/" ruten i app.py slik at spilleren sendes til index2.html om de er avlogget
