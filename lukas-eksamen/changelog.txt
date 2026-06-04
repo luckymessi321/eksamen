@@ -171,3 +171,9 @@ la til en funksjon "get_conn()" som oppretter en tilkobling mellom app.py og MyS
 9:35
 la til en ny mal "register.html" som lar spilleren registrere en bruker via et skjema.
 la til en rute "/register" i app.py som gir skjemaet i register.html klassen RegisterForm. denne brukeren lagres i MySQL databasen.
+
+9:41
+la til en klasse "LoginForm" i forms.py for login-skjemaer
+la til en mal "login.html" som lar spilleren logge inn med en bruker i databasen via et skjema.
+la til en rute "/login" i app.py som gir skjemaet i login.html klassen LoginForm og søker databasen for brukeren spilleren logger inn med.
+

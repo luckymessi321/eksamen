@@ -62,5 +62,44 @@ def register():
 
     return render_template("register.html", form=form)
 
+# rute med kode som kjører KUN når login.html henter data fra app.py (GET), eller sender data til app.py (POST)
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+
+        conn = get_conn()
+        cur = conn.cursor()
+        # kjører MySQL kode på serveren som henter brukernavnet, scoren og passordet til brukeren spilleren logget inn med
+        cur.execute(
+            "SELECT username, score, password FROM users WHERE username=%s",
+            (username,)
+        )
+        # lagrer brukernavn og score som variablen 'user'
+        user = cur.fetchone()
+        cur.close()
+        conn.close()
+        
+        # kode som KUN kjører om brukeren eksisterer
+        if user:
+            # lagrer passord fra cur.execute som en variabel 'password_db'
+            password_db = user[2]
+            # sjekker om passordet stemmer med passord-hashen i databasen
+            if check_password_hash(password_db, password):
+                # lagrer brukernavn og score i session-data
+                session['username'] = user[0]
+                session['score'] = user[1]
+                form.password.errors.append(f'Successfully logged in as {username}')
+            # returnerer feilmelding om passord ikke stemmer med lagret passord
+            else:
+                form.username.errors.append('Invalid password')
+        # returnerer feilmelding om brukernavn ikke finnes
+        else:
+            form.username.errors.append("User doesn't exist")
+
+    return render_template("login.html", form=form)
+
 if __name__ == "__main__":
     app.run(debug=True)

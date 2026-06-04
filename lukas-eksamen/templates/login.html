@@ -1,0 +1,22 @@
+<!--denne filen er limt inn fra en lærer sin presentasjon, men tilpasset til prosjektet mitt-->
+{% extends "base.html" %}
+
+{% block title %} Login {% endblock %}
+
+{% block content %}
+<h2>Log in</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.username.label }} {{ form.username }}<br>
+    {{ form.password.label }} {{ form.password }}<br>
+    <!--gir feilmeldinger fargen rød -->
+    {% for error in form.username.errors %}
+        <p style="color:red">{{ error }}</p>
+    {% endfor %}
+    {% for error in form.password.errors %}
+        <p style="color:green">{{ error }}</p>
+    {% endfor %}
+    <!-- submit-knapp som sender registrert info fra feltene over til app.py-->
+    {{ form.submit }}
+</form>
+{% endblock %}
