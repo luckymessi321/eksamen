@@ -167,3 +167,7 @@ opprettet en ny fil "forms.py" som inneholder en klasse "RegisterForm" for regis
 
 9:27
 la til en funksjon "get_conn()" som oppretter en tilkobling mellom app.py og MySQL databasen på lokal server med mysql_connector
+
+9:35
+la til en ny mal "register.html" som lar spilleren registrere en bruker via et skjema.
+la til en rute "/register" i app.py som gir skjemaet i register.html klassen RegisterForm. denne brukeren lagres i MySQL databasen.

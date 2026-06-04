@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %} Register user {% endblock %}
+
+{% block content %}
+<h2>Register new user</h2>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <!-- utfyllingsfelt med brukernavn og passord-->
+    {{ form.username.label }} {{ form.username }}<br>
+    {{ form.password.label }} {{ form.password }}<br>
+    <!-- submit-knapp som sender registrert info fra feltene over til app.py-->
+    {{ form.submit }}
+    {% for error in form.username.errors %}
+        <p style="color:red">{{ error }}</p>
+    {% endfor %}
+    {% for error in form.password.errors %}
+        <p style="color: green">{{ error }}</p>
+    {% endfor %}
+</form>
+{% endblock %}
